@@ -1,0 +1,182 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+int coeff;
+int pow;
+struct node* next;
+};
+struct node* start1=NULL;
+struct node* start2=NULL;
+struct node* start3=NULL;
+void create(int c,int p,int q)
+{
+struct node* t;
+struct node* new=(struct node *)malloc(sizeof(struct node));
+new->pow=p;
+new->coeff=c;
+new->next=NULL;
+if(q==1)
+{
+if(start1==NULL)
+{ 
+start1=new;
+}
+else
+{
+t=start1;
+while(t->next!=NULL)
+{
+t=t->next;
+}
+t->next=new;
+}
+}
+else if(q==2)
+{
+if(start2==NULL)
+{ 
+start2=new;
+}
+else
+{
+t=start2;
+while(t->next!=NULL)
+{
+t=t->next;
+}
+t->next=new;
+}
+}
+else if(q==3)
+{
+if(start3==NULL)
+{ 
+start3=new;
+}
+else
+{
+t=start3;
+while(t->next!=NULL)
+{
+t=t->next;
+}
+t->next=new;
+}
+} 
+}
+void traverse()
+{
+struct node* t=start3;
+while(t->next!=NULL)
+{
+printf("%dx^%d+",t->coeff,t->pow);
+t=t->next;
+}
+printf("%dx^%d",t->coeff,t->pow);
+}
+void add()
+{
+struct node* one=start1;
+struct node* two=start2;
+while(one!=NULL && two!=NULL)
+{
+if(one->pow==two->pow) 
+{
+int s=one->coeff+two->coeff;
+if(s!=0)
+{
+create(s,one->pow,3);
+}
+one=one->next;
+two=two->next;
+}
+else if(one->pow>two->pow)
+{
+create(one->coeff,one->pow,3);
+one=one->next;
+}
+else if(one->pow<two->pow)
+{
+create(two->coeff,two->pow,3);
+two=two->next;
+}
+}
+while(one!=NULL)
+{
+create(one->coeff,one->pow,3);
+one=one->next;
+}
+while(two!=NULL)
+{
+create(two->coeff,two->pow,3);
+two=two->next;
+}
+}
+void cls()
+{
+struct node*t=start3;
+struct node*p;
+struct node*q;
+for(;t!=NULL;t=t->next)
+{
+for(p=t->next;p!=NULL;p=p->next)
+{
+if(t->pow==p->pow)
+{
+t->coeff=t->coeff+p->coeff;
+while(q->next!=p)
+{
+q=q->next;
+}
+q->next=p->next;
+}
+}
+}
+}
+
+void multiply()
+{
+struct node* one=start1;
+struct node* two=start2;
+for(;one!=NULL;one=one->next)
+{
+for(;two!=NULL;two=two->next)
+{
+create(one->coeff*two->coeff,one->pow+two->pow,3);
+}
+}
+cls();
+}
+void main()
+{
+while(1){
+printf("Enter your choice 1 for adding first polynomial \n2 for adding second polynomial \n3 for adding \n4 for multiplying the given plynomials \n5 for displaying the polynomial as the result\n");
+int c;
+scanf("%d",&c);
+switch(c)
+{
+int p,q;
+case 1:
+printf("Enter the coeff and power\n");
+scanf("%d %d",&q,&p);
+create(q,p,1);
+break;
+case 2:
+printf("Enter the coeff and power\n");
+scanf("%d %d",&q,&p);
+create(q,p,2);
+break;
+case 3:
+add();
+break;
+case 4:
+multiply();
+break;
+case 5:
+traverse();
+break;
+default :
+exit(0);
+}
+}
+}
